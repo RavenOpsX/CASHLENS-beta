@@ -4,7 +4,6 @@ import { motion } from 'framer-motion';
 import { Zap, Shield, BarChart3, ArrowRight, MousePointer2 } from 'lucide-react';
 import Link from 'next/link';
 
-// This is a "Helper" to make animations easier to reuse
 const fadeIn = {
   initial: { opacity: 0, y: 20 },
   whileInView: { opacity: 1, y: 0 },
@@ -14,142 +13,85 @@ const fadeIn = {
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-white text-slate-900 overflow-x-hidden">
-      
-      {/* 1. NAVIGATION BAR */}
-      <nav className="flex items-center justify-between px-6 py-6 max-w-7xl mx-auto">
-        <div className="flex items-center gap-2">
-          <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-            <Zap size={20} className="text-white fill-current" />
+    <div className="min-h-screen bg-[#020617] text-white overflow-x-hidden">
+      {/* 1. NAV */}
+      <nav className="flex items-center justify-between px-8 py-8 max-w-7xl mx-auto relative z-10">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-500/20">
+            <Zap size={22} className="text-white fill-current" />
           </div>
-          <span className="text-xl font-bold tracking-tight">CashLens</span>
+          <span className="text-2xl font-black tracking-tighter italic">CashLens</span>
         </div>
-        <div className="flex gap-4">
-          <Link href="/login" className="px-5 py-2 font-medium text-slate-600 hover:text-slate-900 transition-colors">Login</Link>
-          <Link href="/login" className="px-5 py-2 bg-slate-900 text-white rounded-full font-medium hover:bg-slate-800 transition-all">Get Started</Link>
+        <div className="flex gap-6 items-center">
+          <Link href="/login" className="font-bold text-slate-400 hover:text-white transition-colors">Login</Link>
+          <Link href="/signup" className="px-6 py-3 bg-white text-black rounded-2xl font-black hover:bg-indigo-400 hover:text-white transition-all shadow-xl shadow-white/5">Get Started</Link>
         </div>
       </nav>
 
-      {/* 2. HERO SECTION (The "Hook") */}
-      <section className="pt-20 pb-32 px-6 max-w-5xl mx-auto text-center">
+      {/* 2. HERO */}
+      <section className="pt-20 pb-32 px-6 max-w-5xl mx-auto text-center relative">
         <motion.div 
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.5 }}
-          className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 text-blue-600 text-sm font-bold mb-6"
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-xs font-black mb-8 tracking-widest"
         >
-          <span className="relative flex h-2 w-2">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-600"></span>
-          </span>
-          V1.0 PROTOTYPE FOR STUDENTS
+          V1.0 STEALTH PROTOTYPE
         </motion.div>
         
         <motion.h1 
-          className="text-6xl md:text-7xl font-bold tracking-tight mb-8 leading-[1.1]"
+          className="text-6xl md:text-8xl font-black tracking-tighter mb-8 leading-[0.9] italic"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2, duration: 0.8 }}
         >
-          See where your <span className="text-blue-600">money goes.</span> <br />
-          See how long it <span className="text-emerald-500">can last.</span>
+          Master your <span className="text-indigo-500">outflow.</span> <br />
+          Extend your <span className="text-emerald-400 underline decoration-emerald-400/30">runway.</span>
         </motion.h1>
 
         <motion.p 
-          className="text-xl text-slate-500 max-w-2xl mx-auto mb-10 leading-relaxed"
+          className="text-xl text-slate-400 max-w-2xl mx-auto mb-12 font-medium leading-relaxed"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.4, duration: 1 }}
         >
-          CashLens helps you understand spending patterns, estimate your financial runway, and make smarter decisions before you buy.
+          The financial awareness platform designed for the student hustle. 
+          Stop guessing. Start knowing.
         </motion.p>
 
         <motion.div 
-          className="flex flex-col sm:flex-row items-center justify-center gap-4"
+          className="flex flex-col sm:flex-row items-center justify-center gap-6"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6 }}
         >
-          <Link href="/login" className="w-full sm:w-auto px-8 py-4 bg-blue-600 text-white rounded-2xl font-bold text-lg hover:bg-blue-700 hover:shadow-xl hover:shadow-blue-200 transition-all flex items-center justify-center gap-2 group">
-            Start Your Journey <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
+          <Link href="/signup" className="w-full sm:w-auto px-10 py-5 bg-indigo-600 text-white rounded-[2rem] font-black text-xl hover:bg-indigo-500 shadow-2xl shadow-indigo-500/40 transition-all flex items-center justify-center gap-3 group">
+            Launch Your Journey <ArrowRight size={22} className="group-hover:translate-x-2 transition-transform" />
           </Link>
-          <button className="w-full sm:w-auto px-8 py-4 bg-white border-2 border-slate-200 text-slate-600 rounded-2xl font-bold text-lg hover:bg-slate-50 transition-all">
-            Watch Demo
-          </button>
         </motion.div>
+
+        {/* Decorative Background Glow */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-indigo-600/20 rounded-full blur-[120px] -z-10"></div>
       </section>
 
-      {/* 3. SCROLL-ANIMATED FEATURES (The "Forward Motion") */}
-      <section className="py-32 bg-slate-50 border-y border-slate-200 px-6">
-        <div className="max-w-7xl mx-auto">
-          <motion.div {...fadeIn} className="text-center mb-20">
-            <h2 className="text-4xl font-bold mb-4">Built for the Student Hustle</h2>
-            <p className="text-slate-500">Everything you need to survive the month on a budget.</p>
-          </motion.div>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            {/* Feature 1 */}
+      {/* 3. BENTO FEATURES */}
+      <section className="py-32 px-6 relative border-t border-slate-900">
+        <div className="max-w-7xl mx-auto grid md:grid-cols-3 gap-8">
+          {[
+            { icon: BarChart3, title: 'Visual Runway', desc: 'Real-time survival estimates based on your daily burn rate.', color: 'text-indigo-400' },
+            { icon: MousePointer2, title: 'Impact Simulator', desc: 'See the future impact of a purchase before you tap the card.', color: 'text-emerald-400' },
+            { icon: Shield, title: 'Zero Data Mining', desc: 'No bank logins required. Your financial awareness is private.', color: 'text-rose-400' }
+          ].map((feat, i) => (
             <motion.div 
-              {...fadeIn} 
-              transition={{ delay: 0.2 }}
-              className="p-8 bg-white rounded-3xl border border-slate-200 hover:border-blue-300 transition-colors group"
+              key={i} {...fadeIn} transition={{ delay: i * 0.2 }}
+              className="p-10 bg-slate-900/50 border border-slate-800 rounded-[3rem] hover:border-indigo-500/50 transition-all group"
             >
-              <div className="w-12 h-12 bg-blue-100 text-blue-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                <BarChart3 size={24} />
-              </div>
-              <h3 className="text-xl font-bold mb-3">Financial Runway</h3>
-              <p className="text-slate-500 leading-relaxed">Don't just see a balance. Know exactly how many days your money will last based on your habits.</p>
+              <feat.icon size={32} className={`${feat.color} mb-6 group-hover:scale-110 transition-transform`} />
+              <h3 className="text-2xl font-black mb-4 italic uppercase tracking-tighter">{feat.title}</h3>
+              <p className="text-slate-400 font-medium leading-relaxed">{feat.desc}</p>
             </motion.div>
-
-            {/* Feature 2 */}
-            <motion.div 
-              {...fadeIn} 
-              transition={{ delay: 0.4 }}
-              className="p-8 bg-white rounded-3xl border border-slate-200 hover:border-emerald-300 transition-colors group"
-            >
-              <div className="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                <MousePointer2 size={24} />
-              </div>
-              <h3 className="text-xl font-bold mb-3">Purchase Simulator</h3>
-              <p className="text-slate-500 leading-relaxed">Planning a ₹500 treat? See how it affects your month before you swipe. No more "End-of-Month" surprises.</p>
-            </motion.div>
-
-            {/* Feature 3 */}
-            <motion.div 
-              {...fadeIn} 
-              transition={{ delay: 0.6 }}
-              className="p-8 bg-white rounded-3xl border border-slate-200 hover:border-orange-300 transition-colors group"
-            >
-              <div className="w-12 h-12 bg-orange-100 text-orange-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                <Shield size={24} />
-              </div>
-              <h3 className="text-xl font-bold mb-3">Privacy First</h3>
-              <p className="text-slate-500 leading-relaxed">We don't want your bank login. Just your awareness. Your data is encrypted and yours alone.</p>
-            </motion.div>
-          </div>
+          ))}
         </div>
       </section>
-
-      {/* 4. FINAL CTA SECTION */}
-      <section className="py-32 px-6 text-center">
-        <motion.div {...fadeIn} className="max-w-3xl mx-auto p-12 bg-slate-900 rounded-[3rem] text-white overflow-hidden relative">
-          <div className="relative z-10">
-            <h2 className="text-4xl font-bold mb-6">Ready to see clearly?</h2>
-            <p className="text-slate-400 mb-10 text-lg">Join other students managing their money with CashLens.</p>
-            <Link href="/login" className="px-10 py-4 bg-white text-slate-900 rounded-2xl font-bold text-lg hover:bg-blue-50 transition-all inline-block">
-              Create Your Free Account
-            </Link>
-          </div>
-          {/* Decorative background circle */}
-          <div className="absolute -top-24 -right-24 w-64 h-64 bg-blue-600 rounded-full blur-[100px] opacity-20"></div>
-          <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-emerald-600 rounded-full blur-[100px] opacity-20"></div>
-        </motion.div>
-      </section>
-
-      {/* FOOTER */}
-      <footer className="py-12 border-t border-slate-100 text-center text-slate-400 text-sm">
-        © 2024 CashLens Prototype • DTIE Project • Built with Awareness
-      </footer>
     </div>
   );
 }

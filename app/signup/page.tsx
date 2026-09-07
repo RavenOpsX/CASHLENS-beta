@@ -23,57 +23,63 @@ export default function SignupPage() {
       setError(error.message);
       setLoading(false);
     } else {
-      // Create their profile in our SQL table too!
       router.push('/onboarding');
     }
   };
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-[#020617] flex flex-col justify-center py-12 sm:px-6 lg:px-8 relative overflow-hidden">
+      {/* Background Glow Decor */}
+      <div className="absolute top-0 left-0 w-64 h-64 bg-indigo-600/10 rounded-full blur-[100px] -z-10"></div>
+      
       <div className="sm:mx-auto sm:w-full sm:max-w-md text-center">
-        <div className="inline-flex items-center justify-center w-12 h-12 bg-emerald-500 rounded-2xl mb-4 shadow-lg shadow-emerald-200">
-          <Zap className="text-white fill-current" size={24} />
+        <div className="inline-flex items-center justify-center w-14 h-14 bg-indigo-600 rounded-2xl mb-6 shadow-2xl shadow-indigo-500/20">
+          <Zap className="text-white fill-current" size={28} />
         </div>
-        <h2 className="text-3xl font-extrabold text-slate-900 tracking-tight">Create Account</h2>
-        <p className="mt-2 text-sm text-slate-500">
+        <h2 className="text-4xl font-black text-white tracking-tighter italic">Create Account</h2>
+        <p className="mt-3 text-sm text-slate-400 font-medium">
           Already a member?{' '}
-          <Link href="/login" className="font-bold text-blue-600 hover:text-blue-500">Log in here</Link>
+          <Link href="/login" className="font-bold text-indigo-400 hover:text-indigo-300 transition-colors">Log in here</Link>
         </p>
       </div>
 
-      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-white py-8 px-4 shadow-xl shadow-slate-200/50 sm:rounded-[2rem] sm:px-10 border border-slate-100">
+      <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-md">
+        <div className="bg-slate-900/50 backdrop-blur-xl py-10 px-6 shadow-2xl sm:rounded-[2.5rem] sm:px-10 border border-slate-800">
           <form className="space-y-6" onSubmit={handleSignup}>
             <div>
-              <label className="block text-sm font-bold text-slate-700 mb-2">College Email</label>
+              <label className="block text-xs font-black text-slate-500 uppercase tracking-widest mb-2 ml-1">College Email</label>
               <input
                 type="email"
                 required
-                className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-emerald-500 focus:border-transparent outline-none transition-all"
+                className="w-full px-5 py-4 bg-slate-950/50 border border-slate-800 rounded-2xl text-white placeholder:text-slate-600 focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition-all font-medium"
                 placeholder="name@university.edu"
                 onChange={(e) => setEmail(e.target.value)}
               />
             </div>
 
             <div>
-              <label className="block text-sm font-bold text-slate-700 mb-2">Choose Password</label>
+              <label className="block text-xs font-black text-slate-500 uppercase tracking-widest mb-2 ml-1">Create Password</label>
               <input
                 type="password"
                 required
-                className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-emerald-500 focus:border-transparent outline-none transition-all"
-                placeholder="Make it strong!"
+                className="w-full px-5 py-4 bg-slate-950/50 border border-slate-800 rounded-2xl text-white placeholder:text-slate-600 focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition-all font-medium"
+                placeholder="Choose a strong one"
                 onChange={(e) => setPassword(e.target.value)}
               />
             </div>
 
-            {error && <div className="text-red-500 text-sm font-medium bg-red-50 p-3 rounded-lg">{error}</div>}
+            {error && (
+              <div className="text-rose-400 text-xs font-bold bg-rose-500/10 p-4 rounded-xl border border-rose-500/20">
+                {error}
+              </div>
+            )}
 
             <button
               type="submit"
               disabled={loading}
-              className="w-full flex justify-center py-4 px-4 border border-transparent rounded-2xl shadow-sm text-lg font-bold text-white bg-slate-900 hover:bg-slate-800 transition-all disabled:opacity-50"
+              className="w-full flex justify-center py-5 px-4 rounded-2xl shadow-xl shadow-indigo-500/10 text-lg font-black text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none transition-all disabled:opacity-50 tracking-tight"
             >
-              {loading ? <Loader2 className="animate-spin" /> : 'Join CashLens'}
+              {loading ? <Loader2 className="animate-spin" /> : 'JOIN CASHLENS'}
             </button>
           </form>
         </div>
