@@ -1,24 +1,37 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #020617; /* Much darker navy */
+  --background: #020617; /* Deep Midnight */
+  --foreground: #f8fafc;
 }
 
 body {
-  background: #F1F5F9; /* Slate background to make white cards pop */
-  color: #020617;
+  background: #020617;
+  color: #f8fafc;
+  font-family: 'Inter', sans-serif;
 }
 
-/* Make every card have a crisp border and a subtle shadow */
-.card-style {
-  background: white;
-  border: 1px solid #E2E8F0;
-  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
-  border-radius: 1.5rem;
+/* Premium Dark Card Effect */
+.glass-card {
+  background: rgba(30, 41, 59, 0.5);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 2rem;
 }
 
-input, select, textarea {
-  color: #020617 !important;
-  border: 1.5px solid #CBD5E1 !important; /* Thicker borders for inputs */
+/* Smooth Scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom Scrollbar for the Pro Vibe */
+::-webkit-scrollbar {
+  width: 5px;
+}
+::-webkit-scrollbar-track {
+  background: #020617;
+}
+::-webkit-scrollbar-thumb {
+  background: #1e293b;
+  border-radius: 10px;
 }
