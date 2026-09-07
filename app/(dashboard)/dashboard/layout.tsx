@@ -4,7 +4,7 @@ import MobileNav from "@/components/shared/MobileNav";
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="min-h-screen bg-[#F8FAFC]">
+    <div className="min-h-screen bg-[#F1F5F9]"> {/* Darker background for contrast */}
       <div className="hidden lg:block">
         <Sidebar />
       </div>
