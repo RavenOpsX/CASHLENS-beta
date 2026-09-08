@@ -2,24 +2,11 @@
 export const dynamic = 'force-dynamic';
 
 import React, { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
 import { supabase } from '@/lib/supabase';
-import { Plus, ArrowUpRight, ArrowDownRight, Timer, Wallet, Sparkles, TrendingUp } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { Plus, ArrowUpRight, ArrowDownRight, Timer, Wallet, Sparkles } from 'lucide-react';
 import AddTransactionModal from '@/components/dashboard/AddTransactionModal';
 import Insights from '@/components/dashboard/Insights';
-
-const container = {
-  hidden: { opacity: 0 },
-  show: {
-    opacity: 1,
-    transition: { staggerChildren: 0.1 }
-  }
-};
-
-const item = {
-  hidden: { opacity: 0, y: 20 },
-  show: { opacity: 1, y: 0 }
-};
 
 export default function DashboardPage() {
   const [profile, setProfile] = useState<any>(null);
@@ -41,125 +28,112 @@ export default function DashboardPage() {
   const injectDemoData = async () => {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return;
+    
+    // Create a spread of transactions over the last 10 days to make charts look good
     const demoData = [
-      { user_id: user.id, amount: 12000, category: 'Pocket Money', type: 'income', description: 'Monthly Allowance' },
-      { user_id: user.id, amount: 450, category: 'Food', type: 'expense', description: 'Canteen Feast' },
-      { user_id: user.id, amount: 120, category: 'Transport', type: 'expense', description: 'Auto Fare' },
+      { user_id: user.id, amount: 15000, category: 'Salary', type: 'income', description: 'Monthly Allowance', date: new Date(Date.now() - 10 * 86400000).toISOString() },
+      { user_id: user.id, amount: 150, category: 'Food', type: 'expense', description: 'Chai & Maggi', date: new Date(Date.now() - 5 * 86400000).toISOString() },
+      { user_id: user.id, amount: 800, category: 'Education', type: 'expense', description: 'Exam Fees', date: new Date(Date.now() - 4 * 86400000).toISOString() },
+      { user_id: user.id, amount: 450, category: 'Food', type: 'expense', description: 'Canteen Lunch', date: new Date(Date.now() - 3 * 86400000).toISOString() },
+      { user_id: user.id, amount: 1200, category: 'Shopping', type: 'expense', description: 'New Bag', date: new Date(Date.now() - 2 * 86400000).toISOString() },
+      { user_id: user.id, amount: 100, category: 'Transport', type: 'expense', description: 'Rickshaw', date: new Date(Date.now() - 1 * 86400000).toISOString() },
     ];
+
     await supabase.from('transactions').insert(demoData);
+    alert("Simulation Active: Demo data injected.");
     window.location.reload(); 
   };
 
   useEffect(() => { fetchData(); }, []);
 
+  // SMART MATH ENGINE
   const totalIncome = transactions.filter(t => t.type === 'income').reduce((sum, t) => sum + Number(t.amount), 0);
   const totalExpenses = transactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + Number(t.amount), 0);
   const balance = totalIncome - totalExpenses;
-  const runway = (totalExpenses / 30) > 0 ? Math.floor(balance / (totalExpenses / 30)) : 0;
+  
+  // LOGIC: If expenses are too low, assume a minimum burn rate of ₹250/day
+  const actualDailyAvg = totalExpenses / 30;
+  const smartDailyAvg = actualDailyAvg < 50 ? 250 : actualDailyAvg; 
+  const runway = smartDailyAvg > 0 ? Math.floor(balance / smartDailyAvg) : 0;
 
-  if (loading) return <div className="h-screen flex items-center justify-center bg-[#020617] text-indigo-500 font-black text-2xl animate-pulse italic">CASHLENS...</div>;
+  if (loading) return <div className="h-screen flex items-center justify-center bg-[#020617] text-indigo-500 font-black italic animate-pulse">CASHLENS...</div>;
 
   return (
-    <motion.div 
-      variants={container} initial="hidden" animate="show"
-      className="space-y-10 pb-20"
-    >
-      {/* Header */}
+    <div className="space-y-10 pb-20">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
-        <motion.div variants={item}>
+        <div>
           <h1 className="text-5xl font-black text-white tracking-tighter italic mb-2">
-            Hey, {profile?.full_name?.split(' ')[0] || 'Raven'}!
+            Hey, {profile?.full_name?.split(' ')[0] || 'User'}!
           </h1>
           <p className="text-slate-400 font-medium text-lg">Your financial survival kit is ready.</p>
-        </motion.div>
+        </div>
         
-        <motion.div variants={item} className="flex gap-4">
-          <button onClick={injectDemoData} className="px-6 py-3 bg-slate-800 text-slate-300 rounded-2xl font-bold hover:bg-slate-700 transition-all border border-slate-700 flex items-center gap-2">
-            <Sparkles size={18} /> Demo
+        <div className="flex gap-4">
+          <button onClick={injectDemoData} className="px-6 py-3 bg-slate-900 text-indigo-400 rounded-2xl font-bold hover:bg-slate-800 transition-all border border-indigo-500/20 flex items-center gap-2">
+            <Sparkles size={18} /> LOAD DEMO
           </button>
-          <button onClick={() => setIsModalOpen(true)} className="px-8 py-4 bg-indigo-600 text-white rounded-2xl font-black hover:bg-indigo-500 transition-all shadow-xl shadow-indigo-500/20 flex items-center gap-2">
+          <button onClick={() => setIsModalOpen(true)} className="px-8 py-4 bg-indigo-600 text-white rounded-2xl font-black hover:bg-indigo-500 transition-all shadow-xl shadow-indigo-500/20 flex items-center gap-2 tracking-tighter">
             <Plus size={20} strokeWidth={3} /> NEW ENTRY
           </button>
-        </motion.div>
+        </div>
       </div>
 
-      {/* Grid Summary */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {[
-          { label: 'Balance', val: `₹${balance}`, icon: Wallet, color: 'text-indigo-400', bg: 'bg-indigo-400/10' },
-          { label: 'Runway', val: `${runway} Days`, icon: Timer, color: 'text-amber-400', bg: 'bg-amber-400/10', highlight: true },
-          { label: 'Inflow', val: `₹${totalIncome}`, icon: ArrowUpRight, color: 'text-emerald-400', bg: 'bg-emerald-400/10' },
-          { label: 'Outflow', val: `₹${totalExpenses}`, icon: ArrowDownRight, color: 'text-rose-400', bg: 'bg-rose-400/10' },
-        ].map((card, i) => (
-          <motion.div 
-            key={i} variants={item}
-            whileHover={{ y: -5, scale: 1.02 }}
-            className={`p-8 rounded-[2.5rem] border ${card.highlight ? 'bg-indigo-600 border-indigo-500 shadow-2xl shadow-indigo-500/20' : 'bg-slate-900/50 border-slate-800'} relative overflow-hidden`}
-          >
-            <card.icon className={`${card.highlight ? 'text-white' : card.color} mb-4`} size={32} />
-            <p className={`text-xs font-black uppercase tracking-widest ${card.highlight ? 'text-indigo-200' : 'text-slate-500'}`}>{card.label}</p>
-            <h3 className={`text-3xl font-black mt-1 ${card.highlight ? 'text-white' : 'text-white'}`}>{card.val}</h3>
-          </motion.div>
-        ))}
+        <div className="bg-slate-900/50 p-8 rounded-[2.5rem] border border-slate-800">
+          <Wallet className="text-indigo-400 mb-4" size={32} />
+          <p className="text-xs font-black text-slate-500 uppercase tracking-widest">Balance</p>
+          <h3 className="text-3xl font-black text-white mt-1">₹{balance.toLocaleString()}</h3>
+        </div>
+
+        <div className="bg-indigo-600 p-8 rounded-[2.5rem] shadow-2xl shadow-indigo-500/20 relative overflow-hidden">
+          <Timer className="text-white mb-4" size={32} />
+          <p className="text-xs font-black text-indigo-200 uppercase tracking-widest">Est. Runway</p>
+          <h3 className="text-3xl font-black text-white mt-1">{runway} Days</h3>
+          <div className="absolute -right-4 -bottom-4 w-20 h-20 bg-white rounded-full blur-[50px] opacity-20"></div>
+        </div>
+
+        <div className="bg-slate-900/50 p-8 rounded-[2.5rem] border border-slate-800 text-emerald-400">
+          <ArrowUpRight className="mb-4" size={32} />
+          <p className="text-xs font-black text-slate-500 uppercase tracking-widest">Inflow</p>
+          <h3 className="text-3xl font-black mt-1">₹{totalIncome.toLocaleString()}</h3>
+        </div>
+
+        <div className="bg-slate-900/50 p-8 rounded-[2.5rem] border border-slate-800 text-rose-400">
+          <ArrowDownRight className="mb-4" size={32} />
+          <p className="text-xs font-black text-slate-500 uppercase tracking-widest">Outflow</p>
+          <h3 className="text-3xl font-black mt-1">₹{totalExpenses.toLocaleString()}</h3>
+        </div>
       </div>
 
-      {/* Analytics & Activity */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <motion.div variants={item} className="lg:col-span-2 space-y-8">
-          <Insights transactions={transactions} profile={profile} />
-          
-          <div className="p-8 rounded-[3rem] bg-slate-900/50 border border-slate-800">
-            <div className="flex justify-between items-center mb-8">
-              <h3 className="text-xl font-black text-white italic">Recent Movements</h3>
-              <TrendingUp className="text-slate-600" />
-            </div>
-            <div className="space-y-4">
-              {transactions.length === 0 ? (
-                <p className="text-slate-500 py-10 text-center font-bold">No movements detected yet...</p>
-              ) : (
-                transactions.map((t) => (
-                  <motion.div 
-                    key={t.id} whileHover={{ x: 10 }}
-                    className="flex items-center justify-between p-5 bg-slate-800/30 rounded-3xl border border-slate-800/50 hover:border-indigo-500/50 transition-all group"
-                  >
-                    <div className="flex items-center gap-5">
-                      <div className={`w-14 h-14 rounded-2xl flex items-center justify-center font-black text-xl ${t.type === 'income' ? 'bg-emerald-500/10 text-emerald-400' : 'bg-rose-500/10 text-rose-400'}`}>
-                        {t.category.charAt(0)}
-                      </div>
-                      <div>
-                        <p className="font-bold text-white text-lg group-hover:text-indigo-400 transition-colors">{t.description || t.category}</p>
-                        <p className="text-xs text-slate-500 font-black uppercase tracking-widest">{t.category}</p>
-                      </div>
-                    </div>
-                    <p className={`text-2xl font-black ${t.type === 'income' ? 'text-emerald-400' : 'text-white'}`}>
-                      {t.type === 'income' ? '+' : '-'}₹{t.amount}
-                    </p>
-                  </motion.div>
-                ))
-              )}
-            </div>
-          </div>
-        </motion.div>
+      <Insights transactions={transactions} profile={profile} />
 
-        <motion.div variants={item} className="space-y-6">
-           <div className="p-8 rounded-[3rem] bg-gradient-to-br from-indigo-600 to-violet-700 text-white shadow-2xl">
-              <h3 className="text-2xl font-black italic mb-2">Pro Tip</h3>
-              <p className="text-indigo-100 font-medium">Your current runway is healthy. Consider putting ₹1,000 into your "Emergency" stash.</p>
-           </div>
-           <div className="p-8 rounded-[3rem] bg-slate-900/50 border border-slate-800">
-              <h3 className="text-xl font-black text-white italic mb-6">Streaks</h3>
-              <div className="flex items-center gap-4">
-                 <div className="text-5xl">🔥</div>
-                 <div>
-                    <h4 className="text-2xl font-black text-white">7 Days</h4>
-                    <p className="text-slate-500 text-sm font-bold">AWARENESS STREAK</p>
-                 </div>
+      <div className="p-8 rounded-[3rem] bg-slate-900/50 border border-slate-800">
+        <h3 className="text-xl font-black text-white italic mb-8 uppercase tracking-tighter">Recent Movements</h3>
+        <div className="space-y-4">
+          {transactions.length === 0 ? (
+            <p className="text-slate-600 text-center py-10 font-bold italic">No data detected.</p>
+          ) : (
+            transactions.map((t) => (
+              <div key={t.id} className="flex items-center justify-between p-5 bg-slate-800/30 rounded-3xl border border-slate-800/50 hover:border-indigo-500/50 transition-all">
+                <div className="flex items-center gap-5">
+                  <div className={`w-14 h-14 rounded-2xl flex items-center justify-center font-black text-xl ${t.type === 'income' ? 'bg-emerald-500/10 text-emerald-400' : 'bg-rose-500/10 text-rose-400'}`}>
+                    {t.category.charAt(0)}
+                  </div>
+                  <div>
+                    <p className="font-bold text-white text-lg">{t.description || t.category}</p>
+                    <p className="text-[10px] text-slate-500 font-black uppercase tracking-widest">{t.category} • {new Date(t.date).toLocaleDateString()}</p>
+                  </div>
+                </div>
+                <p className={`text-2xl font-black ${t.type === 'income' ? 'text-emerald-400' : 'text-white'}`}>
+                  {t.type === 'income' ? '+' : '-'}₹{t.amount}
+                </p>
               </div>
-           </div>
-        </motion.div>
+            ))
+          )}
+        </div>
       </div>
 
       <AddTransactionModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onSuccess={fetchData} />
-    </motion.div>
+    </div>
   );
 }
