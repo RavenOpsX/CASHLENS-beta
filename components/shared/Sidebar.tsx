@@ -1,6 +1,6 @@
 "use client";
 import React from 'react';
-import { Home, PieChart, CreditCard, Bell, Award, Settings, Zap, LogOut, CheckCircle2, Map } from 'lucide-react';
+import { Home, PieChart, CreditCard, Bell, Award, Settings, Zap, LogOut, CheckCircle2, Map, User } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
@@ -24,6 +24,7 @@ const Sidebar = () => {
     { icon: Award, label: 'Achievements', href: '/achievements' },
     { icon: CheckCircle2, label: 'Tasks', href: '/tasks' },
     { icon: Settings, label: 'Settings', href: '/settings' },
+    { icon: User, label: 'Profile', href: '/profile' },
   ];
 
   return (
